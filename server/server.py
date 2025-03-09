@@ -20,7 +20,7 @@ while True:
     
     raja = sisalto.find("netascii")
     sisalto = sisalto[2:raja-1]
-    
+    print(pyynnonkoodi)
     
     print(sisalto)
 
@@ -44,20 +44,12 @@ while True:
 
         #useampi paketti
         if len(lahetettava_data) > 512:
-            osat = len(lahetettava_data) // 512
-            print(osat)
-            k = 0
-            b = 512
 
-            for i in range(0, osat):
-                lista.append(lahetettava_data[k:b])
-                k += 512
-                b += 512
-            viimeinenosa = lahetettava_data[k:]
-            lista.append(viimeinenosa)
+            k = 512
+            osat = [lahetettava_data[i:i+k] for i in range(0, len(lahetettava_data), k)]
             
             blokin_numero = 1
-            for i in lista:
+            for i in osat:
                 datapaketti = bytearray()
                 datapaketti.append(0)
                 datapaketti.append(3)
@@ -83,8 +75,42 @@ while True:
             ack = palvelimenSoketti.recv(516)
             print(ack)            
 
-    #asiakas haluaa luoda tiedoston
+    #asiakas haluaa lähettää tiedoston
     elif pyynnonkoodi == 2:
-        pass         
+        lahetys_soketti = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        lahetys_soketti.bind(("127.0.0.1", 22992))
+        jarjestysnumero = 0
+        tiedosto = open(sisalto, "wb")
+        ack = bytearray()
+        ack.append(0)
+        ack.append(4)
+        ack.append(0)
+        ack.append(jarjestysnumero)
+        lahetys_soketti.sendto(ack, asiakkaan_osoite)
+
+        while True:
+            jarjestysnumero += 1
+            ack = bytearray()
+            ack.append(0)
+            ack.append(4)
+            ack.append(0)
+            ack.append(jarjestysnumero)
+            
+            lahetys_soketti.sendto(ack, asiakkaan_osoite)
+            data = lahetys_soketti.recv(600)
+            sisalto1 = data[4:]
+            
+            tiedosto.write(sisalto1)
+            print(len(data))
+            if len(data) < 516:
+                
+                break
+            
+        tiedosto = open(sisalto, "r")
+        data = tiedosto.read() 
+        print(data)       
+
+
+             
     
 
