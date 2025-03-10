@@ -15,14 +15,14 @@ while True:
     sisalto = data[0]
     sisalto = sisalto.decode()
     
-    print(sisalto)
+    #print(sisalto)
     pyynnonkoodi = data[0][1]
     
     raja = sisalto.find("netascii")
     sisalto = sisalto[2:raja-1]
-    print(pyynnonkoodi)
+    #print(pyynnonkoodi)
     
-    print(sisalto)
+   # print(sisalto)
 
     #asiakas haluaa lukea tiedoston
     if pyynnonkoodi == 1:
@@ -59,7 +59,7 @@ while True:
                 blokin_numero += 1
                 palvelimenSoketti.sendto(datapaketti, asiakkaan_osoite)
                 ack = palvelimenSoketti.recv(516)
-                print(ack)
+               # print(ack)
                 
                     
                 
@@ -73,7 +73,7 @@ while True:
             datapaketti += lahetettava_data
             palvelimenSoketti.sendto(datapaketti, asiakkaan_osoite)
             ack = palvelimenSoketti.recv(516)
-            print(ack)            
+           # print(ack)            
 
     #asiakas haluaa lähettää tiedoston
     elif pyynnonkoodi == 2:
@@ -108,7 +108,7 @@ while True:
             
         tiedosto = open(sisalto, "r")
         data = tiedosto.read() 
-        print(data)       
+        #print(data)       
 
 
              

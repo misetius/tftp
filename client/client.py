@@ -34,12 +34,12 @@ def luetiedosto(tiedoston_nimi):
 def laheta_kuittaus(blokkikoodi, osoite):
     
     blokki = blokkikoodi[3]
-    print(blokki)
     lahetattava_kuittaus = bytearray()
     lahetattava_kuittaus.append(0)
     lahetattava_kuittaus.append(4)
     lahetattava_kuittaus.append(0)
     lahetattava_kuittaus.append(blokki)
+    print(f"Lähetetty kuittaus: {lahetattava_kuittaus}")
     
     soketti.sendto(lahetattava_kuittaus, osoite)
 
@@ -59,7 +59,7 @@ def laheta_tiedosto(tiedostonnimi):
     soketti.sendto(wrq, osoite)
     ack = soketti.recvfrom(600)
     uusiosoite = ack[1]
-    print(uusiosoite)
+    print(f"Palvelimen uusiosoite, jossa uusi porttinumero {uusiosoite}")
 
     tiedosto = open(tiedostonnimi, "r")
     lahetettava_data = tiedosto.read()
@@ -96,7 +96,7 @@ def laheta_tiedosto(tiedostonnimi):
             print(len(datapaketti))
             soketti.sendto(datapaketti, uusiosoite)
             ack = soketti.recv(516)
-            print(ack)
+            print(f"Palvelimen lähettämä kuittaus: {ack}")
                 
                     
                 
@@ -111,7 +111,7 @@ def laheta_tiedosto(tiedostonnimi):
         datapaketti += lahetettava_data
         soketti.sendto(datapaketti, uusiosoite)
         ack = soketti.recv(516)
-        print(ack)            
+        print(f"Palvelimen lähettämä kuittaus: {ack}")           
 
 
 lahetysvailataus = input("Haluatko ladata(la) tiedoston vai lähettää(lä) tiedoston: ")
